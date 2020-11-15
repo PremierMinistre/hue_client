@@ -1,0 +1,16 @@
+/home/baptiste/Documents/VisualStudioCode/1_client_hue/bin/Debug/net5.0/1_client_hue
+/home/baptiste/Documents/VisualStudioCode/1_client_hue/bin/Debug/net5.0/1_client_hue.deps.json
+/home/baptiste/Documents/VisualStudioCode/1_client_hue/bin/Debug/net5.0/1_client_hue.runtimeconfig.json
+/home/baptiste/Documents/VisualStudioCode/1_client_hue/bin/Debug/net5.0/1_client_hue.runtimeconfig.dev.json
+/home/baptiste/Documents/VisualStudioCode/1_client_hue/bin/Debug/net5.0/1_client_hue.dll
+/home/baptiste/Documents/VisualStudioCode/1_client_hue/bin/Debug/net5.0/ref/1_client_hue.dll
+/home/baptiste/Documents/VisualStudioCode/1_client_hue/bin/Debug/net5.0/1_client_hue.pdb
+/home/baptiste/Documents/VisualStudioCode/1_client_hue/obj/Debug/net5.0/1_client_hue.csprojAssemblyReference.cache
+/home/baptiste/Documents/VisualStudioCode/1_client_hue/obj/Debug/net5.0/1_client_hue.GeneratedMSBuildEditorConfig.editorconfig
+/home/baptiste/Documents/VisualStudioCode/1_client_hue/obj/Debug/net5.0/1_client_hue.AssemblyInfoInputs.cache
+/home/baptiste/Documents/VisualStudioCode/1_client_hue/obj/Debug/net5.0/1_client_hue.AssemblyInfo.cs
+/home/baptiste/Documents/VisualStudioCode/1_client_hue/obj/Debug/net5.0/1_client_hue.csproj.CoreCompileInputs.cache
+/home/baptiste/Documents/VisualStudioCode/1_client_hue/obj/Debug/net5.0/1_client_hue.dll
+/home/baptiste/Documents/VisualStudioCode/1_client_hue/obj/Debug/net5.0/ref/1_client_hue.dll
+/home/baptiste/Documents/VisualStudioCode/1_client_hue/obj/Debug/net5.0/1_client_hue.pdb
+/home/baptiste/Documents/VisualStudioCode/1_client_hue/obj/Debug/net5.0/1_client_hue.genruntimeconfig.cache
