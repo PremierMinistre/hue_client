@@ -1,12 +1,16 @@
 ﻿using System;
 
-namespace _1_client_hue
+namespace _client_hue
 {
-    class Program
+  class Program
+  {
+    static void Main(string[] args)
     {
-        static void Main(string[] args)
-        {
-            Console.WriteLine("Hello World HUE!");
-        }
+      String bridge_ip = "192.168.1.99";
+
+      hue_trace.DebugPrint("Bridge IP address = {0}", bridge_ip);
+
+      hue_api hue_api_id = new hue_api(bridge_ip);
     }
+  }
 }
