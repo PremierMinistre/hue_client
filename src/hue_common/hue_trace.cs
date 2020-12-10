@@ -1,7 +1,7 @@
 #define DEBUG
 using System;
 
-namespace _client_hue
+namespace _hue_common
 {
   class hue_trace
   {
