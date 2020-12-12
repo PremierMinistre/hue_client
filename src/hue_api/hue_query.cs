@@ -1,5 +1,6 @@
 using System;
 using System.Text.Json;
+using System.Collections.Generic;
 
 namespace _hue_api
 {
@@ -10,7 +11,7 @@ namespace _hue_api
     /* Variables */
 
     /* Functions */
-    public static hue_answer F_HUE_QUERY_create_user(hue_api hue_api_id, string user_name)
+    public static List<hue_answer> F_HUE_QUERY_create_user(hue_api hue_api_id, string user_name)
     {
       return hue_api_id.F_HUE_API_send_post_cmd("/api", String.Concat("{\"devicetype\":\"", user_name, "\"}"));
     }
@@ -34,12 +35,11 @@ namespace _hue_api
         {
           /* This is an error and so we've retrieved all the lights available */
           all_lights_get = true;
-          hue_api_id.F_HUE_API_set_last_answer(hue_answer.F_HUE_ANS_json_convert(bridge_ret));
         }
         else
         {
           /* We can assume this is a light */
-          if(light_number == 0)
+          if (light_number == 0)
           {
             /* 1st light, need to establish the array */
             light_list = new resources.lights.light[1];
@@ -57,6 +57,74 @@ namespace _hue_api
       }
 
       return light_list;
+    }
+
+    public static bool F_HUE_QUERY_set_light_state(
+      hue_api hue_api_id_IN,
+      uint light_id_IN)
+    {
+      bool success = true;
+      List<hue_answer> cmd_ret;
+      string json_light_state = JsonSerializer.Serialize(hue_api_id_IN.resources.lights[light_id_IN].state);
+
+      if (hue_api_id_IN.resources.lights[light_id_IN].type == "Color temperature light")
+      {
+        /* Let's remove color attribute */
+        json_light_state = System.Text.RegularExpressions.Regex.Replace(
+          json_light_state,
+          @"[\\\""""]+xy[azAZ0-9:\\\[\]\""""]+,[azAZ0-9:\\\[\]\""""]+",
+          "");
+        json_light_state = System.Text.RegularExpressions.Regex.Replace(
+          json_light_state,
+          @"[\\\""]+colormode[a-zA-Z0-9:\\\[\]\""]+",
+          "");
+        json_light_state = System.Text.RegularExpressions.Regex.Replace(
+          json_light_state,
+          @"[\\\""]+hue[a-zA-Z0-9:\\\[\]\""]+",
+          "");
+        json_light_state = System.Text.RegularExpressions.Regex.Replace(
+          json_light_state,
+          @"[\\\""]+sat[a-zA-Z0-9:\\\[\]\""]+",
+          "");
+      }
+      if (hue_api_id_IN.resources.lights[light_id_IN].state.effect == null)
+      {
+        json_light_state = System.Text.RegularExpressions.Regex.Replace(
+          json_light_state,
+          @"[\\\""]+effect[a-zA-Z0-9:\\\[\]\""]+",
+          "");
+      }
+      json_light_state = System.Text.RegularExpressions.Regex.Replace(
+        json_light_state,
+        @"[\\\""]+reachable[a-zA-Z0-9:\\\[\]\""]+",
+        "");
+      json_light_state = System.Text.RegularExpressions.Regex.Replace(
+        json_light_state,
+        @",[,]+",
+        @",");
+      json_light_state = System.Text.RegularExpressions.Regex.Replace(
+        json_light_state,
+        @",}",
+        @"}");
+
+      cmd_ret = hue_api_id_IN.F_HUE_API_send_put_cmd(
+        String.Concat(
+          "/api/",
+          hue_api_id_IN.user_token,
+          "/lights/",
+          (light_id_IN + 1).ToString(),
+          "/state"),
+        json_light_state);
+
+      cmd_ret.ForEach(delegate (hue_answer answer)
+      {
+        if (answer.error != null)
+        {
+          success = false;
+        }
+      });
+
+      return success;
     }
   }
 }

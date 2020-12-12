@@ -1,5 +1,6 @@
 using System;
 using System.Net;
+using System.Collections.Generic;
 using _hue_common;
 
 namespace _hue_api
@@ -12,34 +13,34 @@ namespace _hue_api
     internal string user_token { get; set; }
     internal resources.resources resources { get; set; }
 
-    private hue_answer _last_answer;
+    private List<hue_answer> _last_answer;
     ///<summary>
     /// This is the last error occured.
     ///</summary>
-    public hue_answer last_answer
+    public List<hue_answer> last_answer
     {
       get => _last_answer;
     }
     /* Functions */
-    internal void F_HUE_API_set_last_answer(hue_answer new_answer)
+    internal void F_HUE_API_set_last_answer(List<hue_answer> new_answer)
     {
       _last_answer = new_answer;
     }
-    internal hue_answer F_HUE_API_send_post_cmd(string url, string command)
+    internal List<hue_answer> F_HUE_API_send_post_cmd(string url, string command)
     {
       string bridge_command, bridge_ret;
 
       bridge_command = String.Concat(this.bridge_address, url);
 
       bridge_ret = this.webclient_id.UploadString(bridge_command, command);
-      bridge_ret = bridge_ret.Trim('[');
-      bridge_ret = bridge_ret.Trim(']');
       hue_trace.DebugPrint(bridge_ret);
 
-      return hue_answer.F_HUE_ANS_json_convert(bridge_ret);
+      F_HUE_API_set_last_answer(hue_answer.F_HUE_ANS_json_convert(bridge_ret));
+
+      return this.last_answer;
     }
 
-    internal hue_answer F_HUE_API_send_put_cmd(string url, string command)
+    internal List<hue_answer> F_HUE_API_send_put_cmd(string url, string command)
     {
       string bridge_command, bridge_ret;
 
@@ -48,11 +49,11 @@ namespace _hue_api
       bridge_ret = this.webclient_id.UploadString(bridge_command,
                                                   WebRequestMethods.Http.Put,
                                                   command);
-      bridge_ret = bridge_ret.Trim('[');
-      bridge_ret = bridge_ret.Trim(']');
       hue_trace.DebugPrint(bridge_ret);
 
-      return hue_answer.F_HUE_ANS_json_convert(bridge_ret);
+      F_HUE_API_set_last_answer(hue_answer.F_HUE_ANS_json_convert(bridge_ret));
+
+      return this.last_answer;
     }
 
     internal String F_HUE_API_send_get(string url)
@@ -70,7 +71,7 @@ namespace _hue_api
       return bridge_ret;
     }
 
-    public bool F_HUE_API_update_lights()
+    public bool F_HUE_API_get_lights()
     {
       bool success = false;
 
@@ -83,7 +84,10 @@ namespace _hue_api
 
       return success;
     }
-
+    public bool F_HUE_API_set_light_state(uint light_id_IN)
+    {
+      return hue_query.F_HUE_QUERY_set_light_state(this, light_id_IN);
+    }
     /* Constructors */
     ///<summary>
     /// Class constructor with the bridge IP address (format "XXX.XXX.XXX.XXX") as parameter

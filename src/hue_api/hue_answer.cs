@@ -1,5 +1,6 @@
 using _hue_common;
 using System.Text.Json;
+using System.Collections.Generic;
 
 /* Réponses renvoyées par le pont Philips Hue */
 namespace _hue_api
@@ -9,28 +10,40 @@ namespace _hue_api
   ///</summary>
   public class error
   {
-    public int type {get; set;}
-    public string address {get; set;}
-    public string description {get; set;}
+    public int type { get; set; }
+    public string address { get; set; }
+    public string description { get; set; }
   }
   public class success
   {
-    public string username {get; set;}
+    public string username { get; set; }
   }
   /* Root answer class */
   public class hue_answer
   {
     /* Attributes */
-    public error error {get; set;}
-    public success success {get; set;}
+
+    ///<summary>Error returned</summary>
+    public error error { get; set; }
+
+    ///<summary>Success returned</summary>
+    public success success { get; set; }
 
     /* Functions */
-    internal static hue_answer F_HUE_ANS_json_convert(string answer_serialized)
+    internal static List<hue_answer> F_HUE_ANS_json_convert(string answer_serialized)
     {
-      return JsonSerializer.Deserialize<hue_answer>(answer_serialized);
+      /* Issue with Hue Bridge => it doesn't answer proper JSON so it need to be
+       * cleaned up */
+      //answer_serialized = answer_serialized.Trim('[');
+      //answer_serialized = answer_serialized.Trim(']');
+
+      return JsonSerializer.Deserialize<List<hue_answer>>(answer_serialized);
     }
+
+    ///<summary>Print an answer</summary>
     public void print()
     {
+
       if (this.error != null)
       {
         hue_trace.DebugPrint("myhueanswer.error.address = {0}", this.error.address);

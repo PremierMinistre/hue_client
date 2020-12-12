@@ -46,7 +46,7 @@ namespace _hue_api.resources.lights
 
     private uint _sat = 0;
     ///<summary>
-    /// Saturation of the light. 254 is the most saturated (colored) and0 is the least saturated (white).
+    /// Saturation of the light. 254 is the most saturated (colored) and 0 is the least saturated (white).
     ///</summary>
     public uint sat
     {
