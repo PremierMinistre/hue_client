@@ -74,6 +74,7 @@ namespace _hue_api.resources.lights
     ///</summary>
     public System.UInt16 ct { get; set; }
 
+    private string _alert = "none";
     ///<summary>
     /// The alert effect, which is a temporary change to the bulb’s state. This can take one of the following values:
     /// <list type="bullet">
@@ -91,7 +92,23 @@ namespace _hue_api.resources.lights
     ///   </item>
     /// </list>
     ///</summary>
-    public string alert { get; set; }
+    public string alert { 
+      get => _alert;
+      set
+      {
+        if (string.Compare(value, "none") == 0)
+        {
+          _alert = "none";
+        }
+        else if (string.Compare(value, "select") == 0)
+        {
+          _alert = "select";
+        }
+        else if (string.Compare(value, "lselect") == 0)
+        {
+          _alert = "lselect";
+        }
+      } }
 
     ///<summary>
     /// The dynamic effect of the light, can either be “none” or “colorloop”.If set to colorloop, the light will
@@ -190,9 +207,9 @@ namespace _hue_api.resources.lights
     ///</summary>
     public void Print(bool verbose = false)
     {
-      hue_trace.Print("Light info");
-      hue_trace.Print("\tname = {0}", this.name);
+      hue_trace.Print("Light name = {0}", this.name);
       hue_trace.Print("\ton = {0}", this.state.on.ToString());
+      hue_trace.Print("\tbri = {0}", this.state.bri.ToString());
       if(verbose)
       {
         hue_trace.Print("\tcolormode = {0}", this.state.colormode);

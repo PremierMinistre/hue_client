@@ -123,6 +123,7 @@ namespace _client_hue
 
                 for (i = 0; i < hue_api_id.resources.lights.Length; i++)
                 {
+                  hue_trace.Print("Light #{0}", i.ToString());
                   hue_api_id.resources.lights[i].Print(true);
                 }
 
@@ -149,6 +150,7 @@ namespace _client_hue
                       /* This is okay so we get, update and put back to the bridge */
                       hue_api_id.F_HUE_API_get_lights();
                       bool bool_value;
+                      uint uint_value;
                       switch (param_value_couple[0])
                       {
                         case "on":
@@ -161,6 +163,31 @@ namespace _client_hue
                             hue_trace.Print("Error, expected \"true\" or \"false\" and got {0}",param_value_couple[1]);
                             arg_cnt = 0;
                           }
+                          break;
+                        case "bri":
+                          if (uint.TryParse(param_value_couple[1], out uint_value))
+                          {
+                            hue_api_id.resources.lights[light_id].state.bri = uint_value;
+                          }
+                          else
+                          {
+                            hue_trace.Print("Error, expected unsigned int and got {0}",param_value_couple[1]);
+                            arg_cnt = 0;
+                          }
+                          break;
+                        case "ct":
+                          if (uint.TryParse(param_value_couple[1], out uint_value))
+                          {
+                            hue_api_id.resources.lights[light_id].state.ct = (ushort) uint_value;
+                          }
+                          else
+                          {
+                            hue_trace.Print("Error, expected unsigned short and got {0}",param_value_couple[1]);
+                            arg_cnt = 0;
+                          }
+                          break;
+                        case "alert":
+                          hue_api_id.resources.lights[light_id].state.alert = param_value_couple[1];
                           break;
                         default:
                           F_HUE_CLT_print_usage();
